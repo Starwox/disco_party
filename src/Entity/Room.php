@@ -9,10 +9,8 @@ use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: RoomRepository::class)]
 #[ApiResource(
-   collectionOperations: ['get' => ['normalization_context' => ['groups' => 'room:list']]],
-   itemOperations: ['get' => ['normalization_context' => ['groups' => 'room:item']]],
-   order: ['id' => 'ASC'],
-   paginationEnabled: false,
+    order: ['id' => 'ASC'],
+   paginationEnabled: false
 )]
 class Room
 {

@@ -15,10 +15,8 @@ use Symfony\Component\Serializer\Annotation\Groups;
 #[ORM\Table(name: '`user`')]
 #[UniqueEntity(fields: ['email'], message: 'There is already an account with this email')]
 #[ApiResource(
-    collectionOperations: ['get' => ['normalization_context' => ['groups' => 'user:list']]],
-    itemOperations: ['get' => ['normalization_context' => ['groups' => 'user:item']]],
     order: ['id' => 'ASC'],
-    paginationEnabled: false,
+    paginationEnabled: false
 )]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {

@@ -22,11 +22,16 @@ class RoomController extends AbstractController
     public function number(): Response
     {
 
-        $number = substr(uniqid('', true), -8);
+        $number = strtoupper(bin2hex(random_bytes(4)));
 
 
         return new Response(
             '<html><body>Lucky number: '.$number.'</body></html>'
         );
     }
+
+    private function randomizer() {
+
+    }
+
 }
