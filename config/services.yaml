@@ -4,6 +4,10 @@
 # Put parameters here that don't need to change on each machine where the app is deployed
 # https://symfony.com/doc/current/best_practices.html#use-parameters-for-application-configuration
 parameters:
+    spotify_token: '%env(SPOTIFY_TOKEN)%'
+    spotify_client_id: '%env(SPOTIFY_CLIENT_ID)%'
+    spotify_client_secret: '%env(SPOTIFY_CLIENT_SECRET)%'
+    redirect_uri: '%env(REDIRECT_URI)%'
 
 services:
     # default configuration for services in *this* file

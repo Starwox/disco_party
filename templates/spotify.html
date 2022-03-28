@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html id="app" lang="fr" dir="ltr">
+
+<head>
+    <meta charset="utf-8">
+    <title>Connexion - Spotify</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <base href="/">
+    <link rel="icon" href="https://accounts.scdn.co/sso/images/favicon.ace4d8543bbb017893402a1e9d1ac1fa.ico">
+
+    <link rel="preload" href="https://encore.scdn.co/1.2.3/CircularSpotify-UI-Latin-OS2v3-Light.woff2" as="font"
+          type="font/woff2" crossOrigin="true" />
+    <link rel="preload" href="https://encore.scdn.co/1.2.3/CircularSpotify-UI-Latin-OS2v3-Book.woff2" as="font"
+          type="font/woff2" crossOrigin="true" />
+    <link rel="preload" href="https://encore.scdn.co/1.2.3/CircularSpotify-UI-Latin-OS2v3-Bold.woff2" as="font"
+          type="font/woff2" crossOrigin="true" />
+    <link rel="preload" href="https://encore.scdn.co/1.2.3/CircularSpotify-UI-Latin-OS2v3-Black.woff2" as="font"
+          type="font/woff2" crossOrigin="true" />
+    <script defer src="https://accounts.scdn.co/sso/js/indexReact.af737a0c2913f5bd8389.js" sp-bootstrap></script>
+    <meta id="bootstrap-data"
+          sp-bootstrap-data='{"phoneFeatureEnabled":false,"previewEnabled":false,"user":false,"tpaState":"AQCnlqa+YIcfmCRUptDhP/GT23PdY5V3XBINcxfqrSJGdT7SuOpEu9uk8s9XYPcszQsUHNKMt5lhEtOeHVh291Ld9+kCgLcfUPDOwpeJe0981hOoovucyBJdmOqX0YF97XHUnFcFOH7WpPK8uba765do8DiPaB+2m+FDUotUSfjJt0Gv9diT4W61ClE+g/1+ciYPezBiAGP8zAeMMtw10ghoxRACmffFhMXBaKFXbggYGCvZAPvnPWqcU1fkRWr5f1f+wiFb8SDFZVRPiRn5De1AcVD9xTgEJUqavmpE2lSZbYrD20/c9bgaK91sX+OAKJKYPZxW5OrOpxIy1E1w/49uwIeJmp/lWLD2a98jw42yRFjJZi2Z3XCCUEBUEyaL/DTJeDbIIgz7","geoLocationCountryCode":"FR","BON":["0","0",501591671]}'
+          sp-component="login"
+          sp-translations-data='eyJlcnJvclRpdGxlIjoiRXJyZXVyIiwibG9naW5UaXRsZSI6IkNvbm5leGlvbiIsImZvcmdvdFlvdXJQYXNzd29yZFVzZXJuYW1lIjoiTW90IGRlIHBhc3NlIG91Ymxpw6kgPyIsImRvbnRIYXZlQW5BY2NvdW50IjoiVm91cyBuJ2F2ZXogcGFzIGRlIGNvbXB0ZSA/IiwiaW5wdXRVc2VybmFtZSI6IkFkcmVzc2UgZW1haWwgb3Ugbm9tIGQndXRpbGlzYXRldXIiLCJpbnB1dFBhc3N3b3JkIjoiTW90IGRlIHBhc3NlIiwiY2hlY2tib3hSZW1lbWJlck1lIjoiU2Ugc291dmVuaXIgZGUgbW9pIiwiZXJyb3JGb3JtRGVmYXVsdCI6Ik9vcHMhIFNvbWV0aGluZyB3ZW50IHdyb25nLCBwbGVhc2UgdHJ5IGFnYWluIG9yIGNoZWNrIG91dCBvdXIgPGhlbHBMaW5rPmhlbHAgYXJlYTwvaGVscExpbms+IiwiZXJyb3JJbnZhbGlkQ3JlZGVudGlhbHMiOiJOb20gZCd1dGlsaXNhdGV1ciBvdSBtb3QgZGUgcGFzc2UgaW5jb3JyZWN0LiIsImVycm9yVW5rbm93biI6Ik9vcHMhIFNvbWV0aGluZyB3ZW50IHdyb25nLCBwbGVhc2UgdHJ5IGFnYWluIG9yIGNoZWNrIG91dCBvdXIgPGhlbHBMaW5rPmhlbHAgYXJlYTwvaGVscExpbms+IiwiZXJyb3JUcmFuc2llbnQiOiJVbmUgZXJyZXVyIHMnZXN0IHByb2R1aXRlIGxvcnMgZGUgdm90cmUgY29ubmV4aW9uLiBNZXJjaSBkZSByw6llc3NheWVyLiIsImVycm9yRmFjZWJvb2tBY2NvdW50IjoiWW91IGRvIG5vdCBoYXZlIGEgU3BvdGlmeSBhY2NvdW50IGNvbm5lY3RlZCB0byB5b3VyIEZhY2Vib29rIGFjY291bnQuIElmIHlvdSBoYXZlIGEgU3BvdGlmeSBhY2NvdW50LCBwbGVhc2UgbG9nIGluIHdpdGggeW91ciBTcG90aWZ5IGNyZWRlbnRpYWxzLiBJZiB5b3UgZG8gbm90IGhhdmUgYSBTcG90aWZ5IGFjY291bnQsIDxsaW5rV2l0aEhyZWY+c2lnbiB1cDwvbGlua1dpdGhIcmVmPi4iLCJlcnJvclNlcnZlckVycm9yIjoiVW5lIGVycmV1ciBzJ2VzdCBwcm9kdWl0ZSBsb3JzIGR1IHRyYWl0ZW1lbnQgZGUgdm90cmUgZGVtYW5kZS4gTWVyY2kgZGUgcsOpZXNzYXllci4iLCJlcnJvclVzZXJuYW1lUmVxdWlyZWQiOiJWZXVpbGxleiBzYWlzaXIgdm90cmUgbm9tIGQndXRpbGlzYXRldXIgU3BvdGlmeSBvdSB2b3RyZSBhZHJlc3NlIGUtbWFpbC4iLCJlcnJvclVzZXJuYW1lSW52YWxpZENoYXJhY3RlcnMiOiJGb3JiaWRkZW4gY2hhcmFjdGVyKHMpIHtmb3JiaWRkZW5DaGFyc30gaW4gdXNlcm5hbWUuIiwiZXJyb3JQYXNzd29yZFJlcXVpcmVkIjoiRW50cmV6IHZvdHJlIG1vdCBkZSBwYXNzZS4iLCJsb2dJbiI6IlNlIENvbm5lY3RlciIsInNpZ25VcEZvclNwb3RpZnkiOiJKZSBuJ2FpIHBhcyBTcG90aWZ5Iiwib3IiOiJvdSIsImxvZ2luVG9Db250aW51ZSI6IlBvdXIgY29udGludWVyLCBjb25uZWN0ZXotdm91cyDDoCBTcG90aWZ5LiIsImVycm9yVmFsaWRhdGlvbkludmFsaWRDb2RlIjoiQ2UgY29kZSBlc3Qgbm9uIHZhbGlkZS4gQ29udHLDtGxleiBkZSBub3V2ZWF1IGxlIFNNUyBldCByw6llc3NheWV6LiIsImVycm9yU3VibWl0VG9va1Rvb0xvbmdUb0NyZWF0ZSI6IkwnZXjDqWN1dGlvbiBkZSB2b3RyZSBkZW1hbmRlIGEgcHJpcyB0cm9wIGRlIHRlbXBzLiBWZXVpbGxleiByw6llc3NheWVyLiIsImVycm9yQXBwbGVBY2NvdW50IjoiQXVjdW4gY29tcHRlIFNwb3RpZnkgbidlc3QgYXNzb2Npw6kgw6Agdm90cmUgSUQgQXBwbGUuIFNpIHZvdXMgcG9zc8OpZGV6IHVuIGNvbXB0ZSBTcG90aWZ5LCBjb25uZWN0ZXotdm91cyBhdmVjIHZvdHJlIGFkcmVzc2UgZS1tYWlsIG91IHZvdHJlIG5vbSBkJ3V0aWxpc2F0ZXVyIFNwb3RpZnkuIFNpIHZvdXMgbidhdmV6IHBhcyBkZSBjb21wdGUgU3BvdGlmeSwgaW5zY3JpdmV6LXZvdXMuIiwiY29udGludWVXaXRoQXBwbGUiOiJDb250aW51ZXIgYXZlYyBBcHBsZSIsImNvbnRpbnVlV2l0aEZhY2Vib29rIjoiQ29udGludWVyIGF2ZWMgRmFjZWJvb2siLCJjb250aW51ZVdpdGhQaG9uZU51bWJlciI6IkNvbnRpbnVlciBhdmVjIHVuIG51bcOpcm8gZGUgdMOpbMOpcGhvbmUiLCJjb250aW51ZVdpdGhHb29nbGUiOiJDb250aW51ZXIgYXZlYyBHb29nbGUiLCJlcnJvckdvb2dsZUFjY291bnQiOiJBdWN1biBjb21wdGXCoFNwb3RpZnkgbidlc3QgYXNzb2Npw6kgw6Agdm90cmUgY29tcHRlwqBHb29nbGUuIFNpIHZvdXMgcG9zc8OpZGV6IHVuIGNvbXB0ZcKgU3BvdGlmeSwgY29ubmVjdGV6LXZvdXMgYXZlYyB2b3RyZSBhZHJlc3NlIGUtbWFpbCBvdSB2b3RyZSBub20gZCd1dGlsaXNhdGV1csKgU3BvdGlmeS4gU2kgdm91cyBuJ2F2ZXogcGFzIGRlIGNvbXB0ZcKgU3BvdGlmeSwgaW5zY3JpdmV6LXZvdXMuIn0='>
+</head>
+
+<body>
+<div id="root" />
+</body>
+
+</html>

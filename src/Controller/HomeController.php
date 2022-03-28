@@ -22,10 +22,6 @@ class HomeController extends AbstractController
     public function number(): Response
     {
 
-        $number = random_int(0, 999999);
-
-        return new Response(
-            '<html><body>Lucky number: '.$number.'</body></html>'
-        );
+        return $this->render('spotify.html');
     }
 }
