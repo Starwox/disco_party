@@ -28,17 +28,16 @@ class RoomController extends AbstractController
     {
         $this->client = $client;
     }
-    //$number = strtoupper(bin2hex(random_bytes(4)));
 
 
     /**
-     * @Route("/api/spotify-playlist/{playlist_id}", name="playlist_spotify")
+     * @Route("/fr/api/spotify-playlist/{playlist_id}", name="playlist_spotify")
      */
-    public function playlistSpotify($playlist_id): Response
+    public function playlistSpotify($playlist_id)
     {
         $token = $this->getParameter('spotify_token');
-        $client_id= $this->getParameter('spotify_token');
-        $clientSecret = $this->getParameter('spotify_token');
+        //$client_id= $this->getParameter('spotify_token');
+        //$clientSecret = $this->getParameter('spotify_token');
 
         $response = $this->client->request(
             'GET',
@@ -48,31 +47,32 @@ class RoomController extends AbstractController
             ]
         );
 
-        $encoders = [new XmlEncoder(), new JsonEncoder()];
-        $normalizers = [new ObjectNormalizer()];
+        $array = json_decode($response->getContent(), true);
 
-        $serializer = new Serializer($normalizers, $encoders);
-        $json = $serializer->serialize($response->getContent(), 'json');
+        $result = [];
 
-        return new JsonResponse($json);
+        foreach($array["tracks"]["items"] as $track) {
+            $result[] = [
+                "song" => $track["track"]["artists"][0]["name"] . " - " . $track["track"]["name"],
+                "spotify_href" => $track["track"]["external_urls"]["spotify"],
+                "api_href" => $track["track"]["href"]
+            ];
+        }
+        dd($result);
+        return new Response($array["tracks"]);
     }
 
 
+
+
     /**
-     * @Route("/fr/api/spotify-login", name="login_spotify")
+     * @Route("/callback/", name="callback")
      */
-    public function loginSpotify(): Response
+    public function loginSpotify()
     {
-        $redirect_uri = $this->getParameter('redirect_uri');
-        $client_id= $this->getParameter('spotify_token');
 
-        $response = $this->client->request(
-            'GET',
-            'https://accounts.spotify.com/authorize?redirect_uri='.  $redirect_uri.
-            '&response_type=code&client_id=' . $client_id, []
-        );
 
-        return new Response($response->getContent());
+        return new Response("Hello World");
     }
 
 }
