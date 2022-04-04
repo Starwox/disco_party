@@ -31,7 +31,7 @@ class RoomController extends AbstractController
 
 
     /**
-     * @Route("/fr/api/spotify-playlist/{playlist_id}", name="playlist_spotify")
+     * @Route("/fr/api/spotify-playlist/{playlist_id}", name="playlist_spotify", methods={"GET"})
      */
     public function playlistSpotify($playlist_id)
     {
@@ -58,8 +58,8 @@ class RoomController extends AbstractController
                 "api_href" => $track["track"]["href"]
             ];
         }
-        dd($result);
-        return new Response($array["tracks"]);
+        //dd($result);
+        return new JsonResponse($result);
     }
 
 
@@ -70,8 +70,6 @@ class RoomController extends AbstractController
      */
     public function loginSpotify()
     {
-
-
         return new Response("Hello World");
     }
 
