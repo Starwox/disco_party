@@ -35,7 +35,7 @@ class RoomController extends AbstractController
      */
     public function playlistSpotify($playlist_id)
     {
-        $token = $this->getParameter('spotify_token');
+        $token = $_ENV['SPOTIFY_TOKEN'];
 
         $response = $this->client->request(
             'GET',
@@ -65,8 +65,7 @@ class RoomController extends AbstractController
      */
     public function getPlaylist()
     {
-        $token = $this->getParameter('spotify_token');
-
+        $token = $_ENV['SPOTIFY_TOKEN'];
         $response = $this->client->request(
             'GET',
             'https://api.spotify.com/v1/me/playlists',

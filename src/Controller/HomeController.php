@@ -31,15 +31,6 @@ class HomeController extends AbstractController
         $redirect_uri = $_ENV['REDIRECT_URI'];
         $token = $_ENV['SPOTIFY_TOKEN'];
 
-        $response = $this->client->request(
-            'GET',
-            'https://accounts.spotify.com/authorize?client_id=' . $client_id .
-            '&redirect_uri=' . $redirect_uri .
-            '&response_type=code&scope=user-modify-playback-state user-read-playback-state user-read-currently-playing playlist-read-private user-read-private streaming app-remote-control',
-            [
-                "auth_bearer" => $token
-            ]
-        );
 
         return $this->redirectToRoute('playlist_spotify', ["playlist_id" => "5zS7xJKWhgAkCOd4VaV7N9"]);
     }
