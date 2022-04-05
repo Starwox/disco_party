@@ -19,9 +19,22 @@ class HomeController extends AbstractController
    /**
     * @Route("/", name="homepage")
     */
-    public function number(): Response
+    public function home()
     {
+        $client_id = $this->getParameter('spotify_token');
+        $redirect_uri = $this->getParameter('REDIRECT_URI');
+        $token = $this->getParameter('SPOTIFY_TOKEN');
 
-        return $this->render('spotify.html');
+        $response = $this->client->request(
+            'GET',
+            'https://accounts.spotify.com/authorize?client_id=' . $client_id .
+            '&redirect_uri=' . $redirect_uri .
+            '&response_type=code&scope=user-modify-playback-state user-read-playback-state user-read-currently-playing playlist-read-private user-read-private streaming app-remote-control',
+            [
+                "auth_bearer" => $token
+            ]
+        );
+
+        return $this->render($response->getResult());
     }
 }
