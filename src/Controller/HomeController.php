@@ -41,6 +41,6 @@ class HomeController extends AbstractController
             ]
         );
 
-        return $this->render($response->getContent());
+        return new Response($response->getContent());
     }
 }
