@@ -32,6 +32,6 @@ class HomeController extends AbstractController
         $token = $_ENV['SPOTIFY_TOKEN'];
 
 
-        return $this->redirectToRoute('callback');
+        return new Response("Hello World");
     }
 }
