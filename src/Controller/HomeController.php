@@ -41,6 +41,6 @@ class HomeController extends AbstractController
             ]
         );
 
-        return new Response($response->getContent());
+        return $this->redirectToRoute('playlist_spotify', ["playlist_id"]);
     }
 }

@@ -49,7 +49,7 @@ class RoomController extends AbstractController
 
         $result = [];
 
-        foreach($array["items"]["items"] as $track) {
+        foreach($array["tracks"]["items"] as $track) {
             $result[] = [
                 "song" => $track["track"]["artists"][0]["name"] . " - " . $track["track"]["name"],
                 "spotify_href" => $track["track"]["external_urls"]["spotify"],
