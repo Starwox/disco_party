@@ -21,7 +21,7 @@ class HomeController extends AbstractController
     */
     public function home()
     {
-        $client_id = $this->getParameter('spotify_token');
+        $client_id = $this->getParameter('SPOTIFY_CLIENT_ID');
         $redirect_uri = $this->getParameter('REDIRECT_URI');
         $token = $this->getParameter('SPOTIFY_TOKEN');
 
