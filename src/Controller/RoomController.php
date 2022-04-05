@@ -36,8 +36,6 @@ class RoomController extends AbstractController
     public function playlistSpotify($playlist_id)
     {
         $token = $this->getParameter('spotify_token');
-        //$client_id= $this->getParameter('spotify_token');
-        //$clientSecret = $this->getParameter('spotify_token');
 
         $response = $this->client->request(
             'GET',
@@ -51,19 +49,51 @@ class RoomController extends AbstractController
 
         $result = [];
 
-        foreach($array["tracks"]["items"] as $track) {
+        foreach($array["items"]["items"] as $track) {
             $result[] = [
                 "song" => $track["track"]["artists"][0]["name"] . " - " . $track["track"]["name"],
                 "spotify_href" => $track["track"]["external_urls"]["spotify"],
-                "api_href" => $track["track"]["href"]
+                "api_href" => $track["track"]["href"],
+                "img_music" => $track["track"]["album"]["images"]
             ];
         }
-        //dd($result);
         return new JsonResponse($result);
     }
 
+    /**
+     * @Route("/fr/api/spotify-user", name="playlist_user", methods={"GET"})
+     */
+    public function getPlaylist()
+    {
+        $token = $this->getParameter('spotify_token');
 
+        $response = $this->client->request(
+            'GET',
+            'https://api.spotify.com/v1/me/playlists',
+            [
+                "auth_bearer" => $token
+            ]
+        );
 
+        $array = json_decode($response->getContent(), true);
+
+        $result = [];
+
+        foreach($array["items"] as $track) {
+            $result[] = [
+                "id_playlist" => $track["id"],
+                "name" => $track["name"],
+                "spotify_href" => $track["external_urls"]["spotify"],
+                "api_href" => $track["href"],
+                "img_music" => $track["images"],
+                "description" => $track["description"],
+                "total_music" => $track["tracks"]["total"],
+                "uri" => $track["uri"]
+            ];
+        }
+
+        return new JsonResponse($result);
+    }
 
     /**
      * @Route("/callback/", name="callback")
