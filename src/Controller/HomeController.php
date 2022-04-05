@@ -11,10 +11,16 @@ namespace App\Controller;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 class HomeController extends AbstractController
 {
+    private $client;
 
+    public function __construct(HttpClientInterface $client)
+    {
+        $this->client = $client;
+    }
 
    /**
     * @Route("/", name="homepage")
