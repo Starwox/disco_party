@@ -21,10 +21,9 @@ class HomeController extends AbstractController
     */
     public function home()
     {
-        dd($_ENV["SPOTIFY_CLIENT_ID"]);
-        $client_id = $this->getParameter('SPOTIFY_CLIENT_ID');
-        $redirect_uri = $this->getParameter('REDIRECT_URI');
-        $token = $this->getParameter('SPOTIFY_TOKEN');
+        $client_id = $_ENV['SPOTIFY_CLIENT_ID'];
+        $redirect_uri = $_ENV['REDIRECT_URI'];
+        $token = $_ENV['SPOTIFY_TOKEN'];
 
         $response = $this->client->request(
             'GET',
