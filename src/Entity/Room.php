@@ -28,6 +28,12 @@ class Room
     #[Groups(['room:list', 'room:item'])]
     private $code;
 
+    #[ORM\Column(type: 'datetime', nullable: true)]
+    private $lastUpdate;
+
+    #[ORM\Column(type: 'boolean')]
+    private $enable;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -53,6 +59,30 @@ class Room
     public function setCode(?string $code): self
     {
         $this->code = $code;
+
+        return $this;
+    }
+
+    public function getLastUpdate(): ?\DateTimeInterface
+    {
+        return $this->lastUpdate;
+    }
+
+    public function setLastUpdate(?\DateTimeInterface $lastUpdate): self
+    {
+        $this->lastUpdate = $lastUpdate;
+
+        return $this;
+    }
+
+    public function getEnable(): ?bool
+    {
+        return $this->enable;
+    }
+
+    public function setEnable(bool $enable): self
+    {
+        $this->enable = $enable;
 
         return $this;
     }

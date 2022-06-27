@@ -60,12 +60,16 @@ class RoomController extends AbstractController
         return new JsonResponse($result);
     }
 
+
     /**
-     * @Route("/fr/api/spotify-user", name="playlist_user", methods={"GET"})
+     * @Route("/fr/api/spotify-user", name="playlist_user", methods={"POST"})
      */
-    public function getPlaylist()
+    public function getPlaylist(Request $request)
     {
-        $token = $_ENV['SPOTIFY_TOKEN'];
+        //$token = $_ENV['SPOTIFY_TOKEN'];
+        $token = $request->query->get('spotifyToken');
+
+
         $response = $this->client->request(
             'GET',
             'https://api.spotify.com/v1/me/playlists',
@@ -102,4 +106,32 @@ class RoomController extends AbstractController
         return new Response("Hello World");
     }
 
+    /**
+     * @Route("/room/code", name="getCode", methods={"POST"})
+     */
+    public function getCode(Request $request)
+    {
+        $token = $request->query->get('spotifyToken');
+
+
+        return new Response("Hello World");
+    }
+
+    /**
+     * @Route("/test/room", name="create-test", methods={"GET"})
+     */
+    public function createUser($token) {
+
+        $test = "";
+        $call = $this->client->request(
+            'GET',
+            "https://api.spotify.com/v1/me",
+            [
+                "auth_bearer" => $test
+            ]
+        );
+        $array = json_decode($call->getContent(), true);
+
+
+    }
 }
