@@ -31,13 +31,15 @@ class RoomController extends AbstractController
 
 
     /**
-     * @Route("/fr/api/spotify-playlist/{playlist_id}", name="playlist_spotify", methods={"GET"})
+     * @Route("/fr/api/spotify-playlist/", name="playlist_spotify", methods={"GET"})
      */
-    public function playlistSpotify($playlist_id)
+    public function playlistSpotify($playlist_id, Request $request)
     {
-        $token = $_ENV['SPOTIFY_TOKEN'];
+        $token = $request->request->get('spotifyToken');
+        $idPlaylists = $request->request->get('idPlaylists');
 
-        $response = $this->client->request(
+
+        /*$response = $this->client->request(
             'GET',
             'https://api.spotify.com/v1/playlists/' . $playlist_id,
             [
@@ -57,18 +59,17 @@ class RoomController extends AbstractController
                 "img_music" => $track["track"]["album"]["images"]
             ];
         }
-        return new JsonResponse($result);
+        */
+        return new JsonResponse([$idPlaylists, $token]);
     }
 
 
     /**
-     * @Route("/fr/api/spotify-user", name="playlist_user", methods={"POST"})
+     * @Route("/fr/api/spotify-user/{token}", name="playlist_user", methods={"POST"})
      */
-    public function getPlaylist(Request $request)
+    public function getPlaylist($token, Request $request)
     {
-        //$token = $_ENV['SPOTIFY_TOKEN'];
-        $token = $request->query->get('spotifyToken');
-
+        //$token = $request->query->get('spotifyToken');
 
         $response = $this->client->request(
             'GET',
@@ -118,19 +119,38 @@ class RoomController extends AbstractController
     }
 
     /**
-     * @Route("/test/room", name="create-test", methods={"GET"})
+     * @Route("/test/room/{token}", name="create-test", methods={"GET"})
      */
-    public function createUser($token) {
+    public function testRoom($token, Request $request) {
 
-        $test = "";
-        $call = $this->client->request(
-            'GET',
-            "https://api.spotify.com/v1/me",
-            [
-                "auth_bearer" => $test
-            ]
-        );
+        dd($token);
+        try {
+            $call = $this->client->request(
+                'GET',
+                "https://api.spotify.com/v1/me",
+                [
+                    "auth_bearer" => $token
+                ]
+            );
+        } catch (\Exception $e) {
+            dd($e);
+        }
+        /*
+        try {
+            $call = $this->client->request(
+                'GET',
+                "https://api.spotify.com/v1/me",
+                [
+                    "auth_bearer" => "BQCN1-Kapk0Qu6LpwLeftQzQHI2GYZKSRuJwFae55xX_AToZ1c5VMtPVRHhyDMxYLxg5Rh7DDI0cLOaTCfxdUfh09Of_skTBca4lcs2t6Wt6TxUwb5aVkbb_MH0hwFLgbpbCDhqdGdmNAomIcENHXkewnCnNwI2txChTYfS8kE-xnA"
+                ]
+            );
+        } catch (\Exception $e) {
+            dd($e);
+        }*/
         $array = json_decode($call->getContent(), true);
+
+        dd($array);
+
 
 
     }
