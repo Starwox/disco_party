@@ -163,4 +163,19 @@ class RoomController extends AbstractController
 
         return new JsonResponse(200);
     }
+
+
+    /**
+     * @Route("/fr/api/get-room/{test}", name="room")
+     * @param Request $request
+     */
+    public function getRoom(Request $request, EntityManagerInterface $em, $test)
+    {
+        //$jsonContent = $request->getContent();
+        //$data = json_decode($jsonContent)->{"roomId"};
+
+        $musicRound = $em->getRepository(MusicVote::class)->findRoomMusic($test);
+
+        return new JsonResponse($musicRound);
+    }
 }

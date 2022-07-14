@@ -45,6 +45,22 @@ class MusicVoteRepository extends ServiceEntityRepository
         }
     }
 
+    /**
+     * @throws ORMException
+     * @throws OptimisticLockException
+     */
+    public function findRoomMusic($code) {
+        return $this->createQueryBuilder('m')
+            ->innerJoin('m.room', 'r')
+            ->andWhere('r.code = :code')
+            ->setParameter('code', $code)
+            ->orderBy('m.id', 'DESC')
+            ->setMaxResults(4)
+            ->getQuery()
+            ->getResult()
+            ;
+    }
+
     // /**
     //  * @return MusicVote[] Returns an array of MusicVote objects
     //  */
