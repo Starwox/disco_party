@@ -9,16 +9,15 @@
 namespace App\Controller;
 
 
+use App\Entity\MusicVote;
+use App\Entity\Room;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
-use Symfony\Component\Serializer\Encoder\JsonEncoder;
-use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
-use Symfony\Component\Serializer\Serializer;
-use Symfony\Component\Serializer\Encoder\XmlEncoder;
 
 class RoomController extends AbstractController
 {
@@ -31,36 +30,54 @@ class RoomController extends AbstractController
 
 
     /**
-     * @Route("/fr/api/spotify-playlist/", name="playlist_spotify", methods={"GET"})
+     * @Route("/fr/api/spotify-playlist", name="playlist_spotify", methods={"POST"})
      */
-    public function playlistSpotify($playlist_id, Request $request)
+    public function playlistSpotify(Request $request, EntityManagerInterface $em)
     {
-        $token = $request->request->get('spotifyToken');
-        $idPlaylists = $request->request->get('idPlaylists');
+        $token = $request->query->get('spotifyToken');
+        $idPlaylist = $request->query->get('idPlaylist');
 
 
-        /*$response = $this->client->request(
-            'GET',
-            'https://api.spotify.com/v1/playlists/' . $playlist_id,
-            [
-                "auth_bearer" => $token
-            ]
-        );
 
+        try {
+            $response = $this->client->request(
+                'GET',
+                'https://api.spotify.com/v1/playlists/' . $idPlaylist,
+                [
+                    "auth_bearer" => $token
+                ]
+            );
+        } catch (\Exception $e) {
+            return $e;
+        }
         $array = json_decode($response->getContent(), true);
 
         $result = [];
+
+
 
         foreach($array["tracks"]["items"] as $track) {
             $result[] = [
                 "song" => $track["track"]["artists"][0]["name"] . " - " . $track["track"]["name"],
                 "spotify_href" => $track["track"]["external_urls"]["spotify"],
                 "api_href" => $track["track"]["href"],
-                "img_music" => $track["track"]["album"]["images"]
+                "img_music" => $track["track"]["album"]["images"],
+                "duration" => $track["track"]["duration_ms"],
+                "id_music" => $track["track"]["id"],
+                "uri" => $track["track"]["uri"]
             ];
         }
-        */
-        return new JsonResponse([$idPlaylists, $token]);
+
+        $room = new Room();
+        $room->setEnable(true);
+        $room->setLastUpdate(new \DateTime("NOW"));
+        $room->setName($array["owner"]["id"]);
+        $room->setCode(rand(10000,99999));
+
+        $em->persist($room);
+        $em->flush();
+
+        return new JsonResponse([$result, [$room->getCode(), $room->getId()]]);
     }
 
 
@@ -69,7 +86,6 @@ class RoomController extends AbstractController
      */
     public function getPlaylist($token, Request $request)
     {
-        //$token = $request->query->get('spotifyToken');
 
         $response = $this->client->request(
             'GET',
@@ -80,7 +96,6 @@ class RoomController extends AbstractController
         );
 
         $array = json_decode($response->getContent(), true);
-
         $result = [];
 
         foreach($array["items"] as $track) {
@@ -100,58 +115,52 @@ class RoomController extends AbstractController
     }
 
     /**
-     * @Route("/callback/", name="callback")
+     * @Route("/fr/api/music-init", name="music_init", methods={"POST"})
+     * @param Request $request
      */
-    public function loginSpotify()
+    public function musicInit(Request $request, EntityManagerInterface $em)
     {
-        return new Response("Hello World");
-    }
+        $jsonContent = $request->getContent();
+        $items = json_decode($jsonContent);
+        $codeRound = rand(10000,99999);
+        foreach ($items->{"musics"} as $item) {
+            $music = new MusicVote();
+            $music->setMusicName($item->{"song"});
+            $music->setVote(0);
+            $music->setCodeRound($codeRound);
+            $music->setUri($item->{"uri"});
+            $music->setIdMusic($item->{"id_music"});
 
-    /**
-     * @Route("/room/code", name="getCode", methods={"POST"})
-     */
-    public function getCode(Request $request)
-    {
-        $token = $request->query->get('spotifyToken');
+            $room = $em->getRepository(Room::class)->find($items->{"roomId"});
+            $music->setRoom($room);
 
+            $em->persist($music);
 
-        return new Response("Hello World");
-    }
-
-    /**
-     * @Route("/test/room/{token}", name="create-test", methods={"GET"})
-     */
-    public function testRoom($token, Request $request) {
-
-        dd($token);
-        try {
-            $call = $this->client->request(
-                'GET',
-                "https://api.spotify.com/v1/me",
-                [
-                    "auth_bearer" => $token
-                ]
-            );
-        } catch (\Exception $e) {
-            dd($e);
         }
-        /*
-        try {
-            $call = $this->client->request(
-                'GET',
-                "https://api.spotify.com/v1/me",
-                [
-                    "auth_bearer" => "BQCN1-Kapk0Qu6LpwLeftQzQHI2GYZKSRuJwFae55xX_AToZ1c5VMtPVRHhyDMxYLxg5Rh7DDI0cLOaTCfxdUfh09Of_skTBca4lcs2t6Wt6TxUwb5aVkbb_MH0hwFLgbpbCDhqdGdmNAomIcENHXkewnCnNwI2txChTYfS8kE-xnA"
-                ]
-            );
-        } catch (\Exception $e) {
-            dd($e);
-        }*/
-        $array = json_decode($call->getContent(), true);
 
-        dd($array);
+        $em->flush();
 
+        return new JsonResponse([$codeRound, 200]);
+    }
+
+    /**
+     * @Route("/fr/api/vote-music", name="music_vote", methods={"POST"})
+     * @param Request $request
+     */
+    public function voteMusic(Request $request, EntityManagerInterface $em)
+    {
+        $jsonContent = $request->getContent();
+        $data = json_decode($jsonContent);
 
 
+        $musicVote = $em->getRepository(MusicVote::class)->findOneBy([
+            "codeRound" => $data->{"codeRoom"},
+            "idMusic" => $data->{"idMusic"},
+        ]);
+
+        $musicVote->setVote($musicVote->getVote() + 1);
+        $em->flush();
+
+        return new JsonResponse(200);
     }
 }

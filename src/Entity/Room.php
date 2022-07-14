@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\RoomRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Core\Annotation\ApiResource;
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -33,6 +35,14 @@ class Room
 
     #[ORM\Column(type: 'boolean')]
     private $enable;
+
+    #[ORM\OneToMany(mappedBy: 'room', targetEntity: MusicVote::class, orphanRemoval: true)]
+    private $musicVotes;
+
+    public function __construct()
+    {
+        $this->musicVotes = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -83,6 +93,36 @@ class Room
     public function setEnable(bool $enable): self
     {
         $this->enable = $enable;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, MusicVote>
+     */
+    public function getMusicVotes(): Collection
+    {
+        return $this->musicVotes;
+    }
+
+    public function addMusicVote(MusicVote $musicVote): self
+    {
+        if (!$this->musicVotes->contains($musicVote)) {
+            $this->musicVotes[] = $musicVote;
+            $musicVote->setRoom($this);
+        }
+
+        return $this;
+    }
+
+    public function removeMusicVote(MusicVote $musicVote): self
+    {
+        if ($this->musicVotes->removeElement($musicVote)) {
+            // set the owning side to null (unless already changed)
+            if ($musicVote->getRoom() === $this) {
+                $musicVote->setRoom(null);
+            }
+        }
 
         return $this;
     }
