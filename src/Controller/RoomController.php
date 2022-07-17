@@ -17,6 +17,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Response;
+use function Symfony\Config\Monolog\token;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 class RoomController extends AbstractController
@@ -36,7 +37,6 @@ class RoomController extends AbstractController
     {
         $token = $request->query->get('spotifyToken');
         $idPlaylist = $request->query->get('idPlaylist');
-
 
 
         try {
@@ -87,6 +87,7 @@ class RoomController extends AbstractController
     public function getPlaylist($token, Request $request)
     {
 
+
         $response = $this->client->request(
             'GET',
             'https://api.spotify.com/v1/me/playlists',
@@ -130,6 +131,7 @@ class RoomController extends AbstractController
             $music->setCodeRound($codeRound);
             $music->setUri($item->{"uri"});
             $music->setIdMusic($item->{"id_music"});
+            $music->setDuration($item->{"duration"});
 
             $room = $em->getRepository(Room::class)->find($items->{"roomId"});
             $music->setRoom($room);
@@ -140,7 +142,7 @@ class RoomController extends AbstractController
 
         $em->flush();
 
-        return new JsonResponse([$codeRound, 200]);
+        return new JsonResponse($codeRound);
     }
 
     /**
@@ -166,7 +168,7 @@ class RoomController extends AbstractController
 
 
     /**
-     * @Route("/fr/api/get-room/{test}", name="room")
+     * @Route("/fr/api/get-room", name="room")
      * @param Request $request
      */
     public function getRoom(Request $request, EntityManagerInterface $em, $test)
@@ -177,5 +179,55 @@ class RoomController extends AbstractController
         $musicRound = $em->getRepository(MusicVote::class)->findRoomMusic($test);
 
         return new JsonResponse($musicRound);
+    }
+
+    /**
+     * @Route("/fr/api/get-winner-music", name="winner-music", methods={"POST"})
+     * @param Request $request
+     */
+    public function getWinnerMusic(Request $request, EntityManagerInterface $em)
+    {
+        $jsonContent = $request->getContent();
+        $data = json_decode($jsonContent)->{"codeRoom"};
+
+        $musicRound = $em->getRepository(MusicVote::class)->findMusicByCode($data);
+
+        $result[] = [
+            "idMusic" => $musicRound[0]->getIdMusic(),
+            "musicName" => $musicRound[0]->getMusicName(),
+            "vote" => $musicRound[0]->getVote(),
+            "uri" => $musicRound[0]->getUri(),
+            "duration" => $musicRound[0]->getDuration(),
+        ];
+
+        return new JsonResponse([$result[0],200]);
+    }
+
+    /**
+     * @Route("/fr/api/player", name="player", methods={"POST"})
+     * @param Request $request
+     */
+    public function player(Request $request, EntityManagerInterface $em)
+    {
+        $jsonContent = $request->getContent();
+        $data = json_decode($jsonContent);
+
+        $this->client->request(
+            'POST',
+            'https://api.spotify.com/v1/me/player/queue?uri=' . $data->{"uri"},
+            [
+                "auth_bearer" => $data->{"token"},
+            ]
+        );
+
+        $this->client->request(
+            'POST',
+            'https://api.spotify.com/v1/me/player/next',
+            [
+                "auth_bearer" => $data->{"token"},
+            ]
+        );
+
+        return new JsonResponse(200);
     }
 }

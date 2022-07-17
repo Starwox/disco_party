@@ -34,6 +34,9 @@ class MusicVote
     #[ORM\Column(type: 'string', length: 255)]
     private $idMusic;
 
+    #[ORM\Column(type: 'integer')]
+    private $duration;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -107,6 +110,18 @@ class MusicVote
     public function setIdMusic(string $idMusic): self
     {
         $this->idMusic = $idMusic;
+
+        return $this;
+    }
+
+    public function getDuration(): ?int
+    {
+        return $this->duration;
+    }
+
+    public function setDuration(int $duration): self
+    {
+        $this->duration = $duration;
 
         return $this;
     }
